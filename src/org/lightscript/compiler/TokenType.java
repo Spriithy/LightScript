@@ -55,6 +55,7 @@ public enum TokenType {
 	L_SFT("<<"),
 	R_SFT(">>"),
 	ASSIGN("="),
+	REF_ASSIGN(":="),
 	EQUALS("=="),
 	PLUS_EQ("+="),
 	MINUS_EQ("-="),

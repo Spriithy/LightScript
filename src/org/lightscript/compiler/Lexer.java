@@ -54,7 +54,7 @@ public class Lexer {
 		case '>': return follows2('>', R_SFT, '=', GTE, GT);
 		case '<': return follows2('<', L_SFT, '=', LTE, LT);
 		case '=': return follows1('=', EQUALS, ASSIGN);
-		case ':': return follows1(':', BLOCK, COLON);
+		case ':': return follows2(':', BLOCK, '=', REF_ASSIGN, COLON);
 		case '(': next(); return new Token(L_PAREN, line, start);
 		case ')': next(); return new Token(R_PAREN, line, start);
 		case '[': next(); return new Token(L_BRAKT, line, start);
