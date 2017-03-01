@@ -103,9 +103,6 @@ public final class LSVector extends LSValue {
 	}
 
 	private void handleNewEntry(LSValue el) {
-		if (el instanceof LSVector)
-			System.out.println("handling new type entry " + ((LSVector) el).typeString());
-
 		if (el.isNull()) return;
 
 		if (el instanceof LSVector)

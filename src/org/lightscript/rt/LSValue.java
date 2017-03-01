@@ -38,7 +38,7 @@ public abstract class LSValue {
 		return type;
 	}
 	
-	public abstract <T> T copy();
+	public abstract <T extends LSValue> T copy();
 	
 	public String typeString() {
 		return type.toString();
