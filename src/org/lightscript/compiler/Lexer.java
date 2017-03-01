@@ -21,7 +21,8 @@ public class Lexer {
 	}
 
 	private void lexerror(String msg) {
-		System.err.println(file + ":" + line + "," + col + ": " + msg);
+		System.err.println(file + ": Syntax error (line=" + + line + ", col" + "=" + col + ")");
+		System.err.println("\t" + msg);
 		System.exit(1);
 	}
 	
@@ -67,7 +68,7 @@ public class Lexer {
 			if (next() && ch == '.')
 					if (next() && ch == '.')
 						return new Token(ELLIPSIS, line, start);
-					else lexerror("unexpected character after '..'");
+					else lexerror("Unexpected character after '..'");
 			else if (Character.isDigit(ch))
 				return number(true);
 			else next();
@@ -97,7 +98,7 @@ public class Lexer {
 				return string();
 		}
 		
-		lexerror("unexpected lexer state (meeting '" + ch + "')");
+		lexerror("Unexpected lexer state (meeting '" + ch + "')");
 		return null;
 	}
 	
@@ -133,26 +134,26 @@ public class Lexer {
 				case 'e': ch = 0x1b; break;
 				case '?': ch = 0x3f; break;
 				case 'u': case 'U':
-					lexerror("unicode escape sequences not supported yet in string literals");
+					lexerror("Unicode escape sequences not supported yet in string literals");
 				case (char) -1:
-					lexerror("unexpected end of file in string literal (within escape sequence)");
+					lexerror("Unexpected end of file in string literal (within escape sequence)");
 				case '\n': case '\r':
-					lexerror("unterminated escape sequence in string literal");
+					lexerror("Unterminated escape sequence in string literal");
 				default:
-					lexerror("unexpected escape character '\\" + ch + "' in string literal");
+					lexerror("Unexpected escape character '\\" + ch + "' in string literal");
 				}
 				str += ch;
 				break;
 			case (char) -1:
-				lexerror("unexpected end of file in string literal");
+				lexerror("Unexpected end of file in string literal");
 			case '\n': case '\r':
-				lexerror("unterminated string literal");
+				lexerror("Unterminated string literal");
 			default:
 				str += ch;
 				break;
 			}
 			
-			if (!next()) lexerror("unexpected end of input in string literal");
+			if (!next()) lexerror("Unexpected end of input in string literal");
 		}
 	}
 	
@@ -168,12 +169,12 @@ public class Lexer {
 					num += ch;
 				
 				if (num.length() == 0)
-					lexerror("expected hexadecimal digits after '0x' prefix");
+					lexerror("Expected hexadecimal digits after '0x' prefix");
 				
 				try {
 					return new Token(Long.decode("0x" + num), INTEGER, line, col - 1 - num.length());
 				} catch (NumberFormatException e) {
-					lexerror("invalid hexadecimal input '0x" + num + "'");
+					lexerror("Invalid hexadecimal input '0x" + num + "'");
 				}
 			}
 			
@@ -187,11 +188,11 @@ public class Lexer {
 		while (next() && checkIn("0123456789.eE")) {
 			if (ch == '.')
 				if (dec)
-					lexerror("unexpected '.' in decimal litteral (" + num + ")"); 
+					lexerror("Unexpected '.' in decimal litteral (" + num + ch + ")"); 
 				else dec = true;
 			
 			if (checkIn("eE")) {
-				if (exp) lexerror("unexpected '" + ch + "' in decimal litteral (" + num + ")");
+				if (exp) lexerror("Unexpected '" + ch + "' in decimal litteral (" + num + ch + ")");
 				num += ch;
 				next();
 				if (checkIn("+-"))
@@ -204,14 +205,14 @@ public class Lexer {
 		}
 		
 		if (!checkIn("0123456789.", num.charAt(num.length() - 1)))
-			lexerror("malformed numeric litteral '" + num + "' (unexpected '" + ch + "')");
+			lexerror("Malformed numeric litteral '" + num + ch + "' (unexpected '" + ch + "')");
 		
 		try {
 			if (dec)
 				return new Token(Double.valueOf(num), DECIMAL, line, col - num.length());		
 			return new Token(Long.valueOf(num), INTEGER, line, col - num.length());
 		} catch (NumberFormatException e) {
-			lexerror("'" + (dec ? Double.valueOf(num) : Long.decode(num)) + "' overflows builtin integer type (64 bits)");
+			lexerror("'" + (dec ? Double.valueOf(num) : Long.decode(num)) + "' overflows builtin integer type (" + Long.SIZE + "-bits)");
 		}
 		
 		return null;
@@ -259,11 +260,11 @@ public class Lexer {
 		next();
 		lo = ch;
 		if (hi == (char)-1 || lo == (char)-1)
-			lexerror("unexpected end of file in hexadecimal escape sequence");
+			lexerror("Unexpected end of file in hexadecimal escape sequence");
 		if (hi == '\n' || lo == '\n' || hi == '\r' || lo == '\r')
-			lexerror("unexpected line feed in hexadecimal escape sequence");
+			lexerror("Unexpected line feed in hexadecimal escape sequence");
 		if (!isXDigit(hi) || !isXDigit(lo))
-			lexerror("unexpected character in hexadecimal escape sequence '\\x" + hi + "" + lo + "'");
+			lexerror("Unexpected character in hexadecimal escape sequence '\\x" + hi + "" + lo + "'");
 		return (char) ((hexValueOf(hi) << 4) | hexValueOf(lo));
 	}
 

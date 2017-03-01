@@ -1,3 +1,4 @@
+
 import org.lightscript.rt.LSNumber;
 import org.lightscript.rt.LSVector;
 
