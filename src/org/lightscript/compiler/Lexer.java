@@ -3,15 +3,24 @@ package org.lightscript.compiler;
 import static org.lightscript.compiler.TokenType.*;
 
 import java.io.FileReader;
+import java.io.InputStreamReader;
 
 public class Lexer {
 
-	private FileReader	in;
-	private String		file;
-	private int			line, col;
+	private String	file;
+	private int		line, col;
+	private InputStreamReader	in;
 
 	private char ch;
 
+	public Lexer() throws Exception {
+		in = new InputStreamReader(System.in);
+		file = "stdin";
+		line = 1;
+		col = 0;
+		next();
+	}
+	
 	public Lexer(String path) throws Exception {
 		in = new FileReader(path);
 		file = path;

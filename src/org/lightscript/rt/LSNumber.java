@@ -40,6 +40,26 @@ public final class LSNumber extends LSValue implements Comparable<LSNumber> {
 		return type == DECIMAL ? new LSNumber(decimalValue.longValue()) : new LSNumber(integerValue);
 	}
 	
+	public float jFloat() {
+		return (float) jDouble();
+	}
+	
+	public double jDouble() {
+		return type == INTEGER ? integerValue.doubleValue() : decimalValue;
+	}
+
+	public char jChar() {
+		return type == INTEGER ? (char) jInt() : 0;
+	}
+	
+	public int jInt() {
+		return (int) jLong();
+	}
+	
+	public long jLong() {
+		return type == INTEGER ? integerValue : decimalValue.longValue();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public LSNumber copy() {
 		return new LSNumber(type == DECIMAL ? decimalValue : integerValue);
