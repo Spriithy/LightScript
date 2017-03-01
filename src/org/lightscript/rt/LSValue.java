@@ -38,6 +38,8 @@ public abstract class LSValue {
 		return type;
 	}
 	
+	public abstract <T> T copy();
+	
 	public String typeString() {
 		return type.toString();
 	}
@@ -50,16 +52,14 @@ public abstract class LSValue {
 		return String.format("<%s@%x>", typeString(), hashCode());
 	}
 	
-	public abstract <T> T copy();
-	
 	@Override
 	public String toString() {
 		return hashString();
 	}
 	
 	public static String getShortStringOf(LSValue val) {
-		//if (val.isComposite())
-		//	return val.hashString();
+		if (val.isComposite())
+			return val.hashString();
 		return val.toString();
 	}
 	
