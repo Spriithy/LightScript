@@ -5,6 +5,12 @@ public final strictfp class Constants {
 	// Should not be instantiated
 	private Constants() {}
 
+	/**
+	 * The NULL Object reference. It differs from the NULL pointer in such a way that an
+	 * object could be NULL without having its pointer set to Pointers.NULL
+	 */
+	transient public static final RuntimeObject NULL = Null.getInstance();
+
 	public static final int	MIN_POOL_SIZE	= 1 << 5;
 	public static final int	MAX_POOL_SIZE	= 1 << 10;
 
@@ -32,7 +38,8 @@ public final strictfp class Constants {
 		if (index >= STRING_POOL.length)
 			throw new IndexOutOfBoundsException("String pool index out of bounds (index=" + index + ")");
 
-		// It's important to clone the char array so further modifications happen on a safe copy of the string
+		// It's important to clone the char array so further modifications happen on a
+		// safe copy of the string
 		// to ensure constant values of data pools.
 		// overflow-aware
 		return STRING_POOL[index].clone();
