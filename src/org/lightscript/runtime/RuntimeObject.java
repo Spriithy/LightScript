@@ -4,7 +4,6 @@ import static org.lightscript.runtime.RuntimeObject.RuntimeObjectKind.FREE;
 import static org.lightscript.runtime.RuntimeObject.RuntimeObjectKind.NONE;
 
 import org.lightscript.runtime.Pointers.Pointer;
-import org.lightscript.runtime.RuntimeObject.RuntimeObjectKind;
 import org.lightscript.runtime.errors.DuplicatePointerException;
 
 /**
@@ -26,6 +25,11 @@ public abstract class RuntimeObject {
 	transient protected final Pointer pointer;
 
 	/**
+	 * Keep track of the reference count for this object's instance.
+	 */
+	transient protected int refCount;
+
+	/**
 	 * Keep track of the Object's kind. The field defaults to
 	 * {@link RuntimeObjectKind.NONE} so that any new undefined instance of a
 	 * RuntimeObject is considered as such anyways.
@@ -44,6 +48,9 @@ public abstract class RuntimeObject {
 
 		// And bind it to this instance
 		pointer.bind(this);
+		
+		// Object is not referenced by itself
+		refCount = 0;
 	}
 
 	/**
@@ -66,12 +73,12 @@ public abstract class RuntimeObject {
 			return pointer.equals(((RuntimeObject) obj).pointer);
 		return false;
 	}
-	
+
 	// TODO request environment to free this
 	public abstract void free();
-	
+
 	public boolean isFreeOK() {
-		return kind.is(FREE);
+		return kind.is(FREE) && refCount == 0;
 	}
 
 	/**

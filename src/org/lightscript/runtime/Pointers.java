@@ -106,8 +106,7 @@ public final class Pointers {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (obj == null)
-				return false;
+			if (obj == null) return false;
 
 			// Simply compare addresses valuess
 			if (obj instanceof Pointer)
@@ -162,9 +161,10 @@ public final class Pointers {
 
 	// Check for duplicates in the Pointer vector
 	private static void checkDuplicates(int addr) {
-		for (Pointer pointer : pointers)
+		for (Pointer pointer : pointers) {
 			if (pointer.addr == addr)
 				throw new DuplicatePointerException(addr);
+		}
 	}
 
 	// Used to generate random and unique addresses
